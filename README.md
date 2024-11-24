@@ -41,45 +41,47 @@
 
 ]]--
 
-local player = game.Players.LocalPlayer
+-- On commence par obtenir les services nécessaires
 local workspace = game:GetService("Workspace")
-local soundService = game:GetService("SoundService")
+local player = game.Players.LocalPlayer
 
--- Drapeau pour vérifier si l'objet a déjà été supprimé
-local hasDestroyed = false
-
--- Fonction pour supprimer __RainEmitter et __RainSoundGroup une seule fois
-local function destroyRainEffects()
-    if hasDestroyed then
-        return -- Ne rien faire si les effets ont déjà été supprimés
-    end
-
-    -- Supprimer __RainEmitter dans Camera si présent
+-- Fonction qui vérifie l'existence des objets et les manipule si disponibles
+local function handleRainEffects()
+    -- Cherche l'objet __RainEmitter sous Camera
     local camera = workspace:FindFirstChild("Camera")
+    
     if camera then
         local rainEmitter = camera:FindFirstChild("__RainEmitter")
+        
         if rainEmitter then
+            -- Vérifier si RainStraight existe sous __RainEmitter
+            local rainStraight = rainEmitter:FindFirstChild("RainStraight")
+            
+            if rainStraight then
+                -- Si RainStraight existe, on peut l'utiliser
+                print("RainStraight trouvé sous __RainEmitter.")
+                -- Exemple de manipulation (comme désactiver RainStraight)
+                rainStraight.Enabled = false
+            else
+                -- Si RainStraight n'existe pas, afficher un message d'erreur
+                print("RainStraight n'existe pas sous __RainEmitter.")
+            end
+            
+            -- Maintenant, tentons de détruire RainEmitter (si c'est ce que tu souhaites)
             rainEmitter:Destroy()
             print("__RainEmitter a été supprimé.")
+            
+        else
+            -- Si __RainEmitter n'existe pas sous Camera, afficher un message d'erreur
+            print("__RainEmitter n'existe pas sous Camera.")
         end
+    else
+        -- Si Camera n'existe pas dans workspace, afficher un message d'erreur
+        print("Camera n'existe pas dans workspace.")
     end
-
-    -- Supprimer __RainSoundGroup dans SoundService si présent
-    local rainSoundGroup = soundService:FindFirstChild("__RainSoundGroup")
-    if rainSoundGroup then
-        rainSoundGroup:Destroy()
-        print("__RainSoundGroup a été supprimé.")
-    end
-
-    -- Mettre à jour le drapeau pour empêcher la suppression répétée
-    hasDestroyed = true
 end
 
--- Détection de la première exécution
-game:GetService("RunService").Heartbeat:Connect(function()
-    -- Vérifie si __RainEmitter est toujours là et le supprime
-    if not hasDestroyed then
-        destroyRainEffects()
-    end
-end)
+-- Appeler la fonction pour gérer les effets de pluie
+handleRainEffects()
+
 
