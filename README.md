@@ -59,12 +59,12 @@ local function handleRainEffects()
             
             if rainStraight then
                 -- Si RainStraight existe, on peut l'utiliser
-                print("RainStraight trouvé sous __RainEmitter.")
+              
                 -- Exemple de manipulation (comme désactiver RainStraight)
                 rainStraight.Enabled = false
             else
                 -- Si RainStraight n'existe pas, afficher un message d'erreur
-                print("RainStraight n'existe pas sous __RainEmitter.")
+                print("")
             end
             
             -- Maintenant, tentons de détruire RainEmitter (si c'est ce que tu souhaites)
@@ -73,11 +73,11 @@ local function handleRainEffects()
             
         else
             -- Si __RainEmitter n'existe pas sous Camera, afficher un message d'erreur
-            print("__RainEmitter n'existe pas sous Camera.")
+            print("")
         end
     else
         -- Si Camera n'existe pas dans workspace, afficher un message d'erreur
-        print("Camera n'existe pas dans workspace.")
+        print("")
     end
 end
 
